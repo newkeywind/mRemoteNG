@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Drawing;
 using System.Runtime.Versioning;
 using System.Windows.Forms;
@@ -60,6 +61,8 @@ namespace mRemoteNG.UI
 
         private const string DefaultConnectionIcon = "";
 
+        private static readonly ConcurrentDictionary<string, Icon> IconCache = new(StringComparer.OrdinalIgnoreCase);
+
         private string GetConnectionIcon(ConnectionInfo connection)
         {
             if (string.IsNullOrEmpty(connection.Icon))
@@ -70,7 +73,7 @@ namespace mRemoteNG.UI
             bool connected = connection.OpenConnections.Count > 0;
             string name = BuildConnectionIconName(connection.Icon, connected);
             if (ImageList.Images.ContainsKey(name)) return name;
-            Icon image = ConnectionIcon.FromString(connection.Icon);
+            Icon image = GetCachedConnectionIcon(connection.Icon);
             if (image == null)
             {
                 return DefaultConnectionIcon;
@@ -79,6 +82,17 @@ namespace mRemoteNG.UI
             ImageList.Images.Add(BuildConnectionIconName(connection.Icon, false), image);
             ImageList.Images.Add(BuildConnectionIconName(connection.Icon, true), Overlay(image, Properties.Resources.ConnectedOverlay));
             return name;
+        }
+
+        private static Icon GetCachedConnectionIcon(string iconName)
+        {
+            if (IconCache.TryGetValue(iconName, out Icon cached)) return cached;
+
+            Icon loaded = ConnectionIcon.FromString(iconName);
+            if (loaded != null)
+                IconCache.TryAdd(iconName, loaded);
+
+            return loaded;
         }
 
         private static Bitmap Overlay(Icon background, Image foreground)

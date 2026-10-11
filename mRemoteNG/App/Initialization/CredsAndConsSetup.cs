@@ -16,7 +16,7 @@ namespace mRemoteNG.App.Initialization
                 Runtime.ConnectionsService.NewConnectionsFile(Runtime.ConnectionsService.GetStartupConnectionFileName());
 
             Runtime.TryInitializeUserProfile();
-            Runtime.LoadConnections();
+            Runtime.LoadConnectionsAsync();
         }
     }
 }

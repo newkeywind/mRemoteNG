@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -194,8 +195,10 @@ namespace mRemoteNG.UI.Window
                 return;
             }
 
+            Stopwatch sw = PerfLogger.Start();
             ConnectionTree.ConnectionTreeModel = connectionsLoadedEventArgs.NewConnectionTreeModel;
             ConnectionTree.SelectedObject = connectionsLoadedEventArgs.NewConnectionTreeModel.RootNodes.FirstOrDefault();
+            PerfLogger.Log("UI: connections loaded handler (model set + select)", sw);
         }
 
         #endregion

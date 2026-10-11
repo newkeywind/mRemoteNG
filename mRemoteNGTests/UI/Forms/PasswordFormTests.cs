@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using mRemoteNG.UI.Forms;
 using mRemoteNGTests.TestHelpers;
@@ -54,6 +55,19 @@ namespace mRemoteNGTests.UI.Forms
             
             // Verify that the password field has focus when the form is loaded
             Assert.That(passwordTextBox.Focused, Is.True, "Password field should have autofocus when form loads");
+        }
+
+        [Test]
+        public void ActionButtonsAreWithinClientArea()
+        {
+            Rectangle clientArea = _passwordForm.ClientRectangle;
+            Button okButton = _passwordForm.FindControl<Button>("btnOK");
+            Button cancelButton = _passwordForm.FindControl<Button>("btnCancel");
+
+            Assert.That(clientArea.Contains(okButton.Bounds), Is.True,
+                $"OK button {okButton.Bounds} must be fully inside the client area {clientArea}.");
+            Assert.That(clientArea.Contains(cancelButton.Bounds), Is.True,
+                $"Cancel button {cancelButton.Bounds} must be fully inside the client area {clientArea}.");
         }
 
         [Test]

@@ -95,8 +95,14 @@ public sealed class PluginService
             string[] pluginFiles = Directory.EnumerateFiles(pluginDirectory, "*.dll", SearchOption.TopDirectoryOnly).ToArray();
             App.Runtime.MessageCollector.AddMessage(Messages.MessageClass.InformationMsg, $"Plugin scan directory '{pluginDirectory}' found {pluginFiles.Length} DLL(s).", true);
 
+            bool isAppBaseDirectory = IsAppBaseDirectory(pluginDirectory);
             foreach (string pluginPath in pluginFiles)
             {
+                if (!IsPluginFileCandidate(pluginPath, isAppBaseDirectory))
+                {
+                    continue;
+                }
+
                 App.Runtime.MessageCollector.AddMessage(Messages.MessageClass.InformationMsg, $"Plugin candidate: '{pluginPath}'.", true);
 
                 try
@@ -145,8 +151,14 @@ public sealed class PluginService
                 continue;
             }
 
+            bool isAppBaseDirectory = IsAppBaseDirectory(pluginDirectory);
             foreach (string pluginPath in Directory.EnumerateFiles(pluginDirectory, "*.dll", SearchOption.TopDirectoryOnly))
             {
+                if (!IsPluginFileCandidate(pluginPath, isAppBaseDirectory))
+                {
+                    continue;
+                }
+
                 try
                 {
                     Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(pluginPath);
@@ -226,6 +238,33 @@ public sealed class PluginService
         }
 
         return directories.Distinct(StringComparer.OrdinalIgnoreCase);
+    }
+
+    private static bool IsAppBaseDirectory(string directory)
+    {
+        string appBaseDirectory = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return string.Equals(directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), appBaseDirectory, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsPluginFileCandidate(string pluginPath, bool isAppBaseDirectory)
+    {
+        string assemblyShortName;
+        try
+        {
+            assemblyShortName = AssemblyName.GetAssemblyName(pluginPath).Name;
+        }
+        catch (Exception ex) when (ex is BadImageFormatException or FileNotFoundException or FileLoadException or IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+
+        return !isAppBaseDirectory || !IsAssemblyAlreadyLoaded(assemblyShortName);
+    }
+
+    private static bool IsAssemblyAlreadyLoaded(string assemblyShortName)
+    {
+        return AppDomain.CurrentDomain.GetAssemblies()
+            .Any(assembly => string.Equals(assembly.GetName().Name, assemblyShortName, StringComparison.OrdinalIgnoreCase));
     }
 
     private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)

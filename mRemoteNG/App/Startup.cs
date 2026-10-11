@@ -40,11 +40,10 @@ namespace mRemoteNG.App
         {
             Debug.Print("---------------------------" + Environment.NewLine + "[START] - " + Convert.ToString(DateTime.Now, CultureInfo.InvariantCulture));
             StartupDataLogger startupLogger = new(messageCollector);
-            startupLogger.LogStartupData();
+            _ = Task.Run(() => startupLogger.LogStartupData());
             CompatibilityChecker.CheckCompatibility(messageCollector);
             ParseCommandLineArgs(messageCollector);
             IeBrowserEmulation.Register();
-            _connectionIconLoader.GetConnectionIcons();
             DefaultConnectionInfo.Instance.LoadFrom(Settings.Default, a => "ConDefault" + a);
             DefaultConnectionInheritance.Instance.LoadFrom(Settings.Default, a => "InhDefault" + a);
 
@@ -60,6 +59,11 @@ namespace mRemoteNG.App
                 messageCollector.AddMessage(MessageClass.WarningMsg, $"Failed to initialize options repository: {ex.Message}");
             }
 #endif
+        }
+
+        public void StartLoadConnectionIconsInBackground()
+        {
+            _ = Task.Run(() => _connectionIconLoader.GetConnectionIcons());
         }
 
         private static void ParseCommandLineArgs(MessageCollector messageCollector)

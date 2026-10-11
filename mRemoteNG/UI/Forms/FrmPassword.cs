@@ -63,7 +63,6 @@ namespace mRemoteNG.UI.Forms
             ApplyTheme();
             DisplayProperties display = new();
             pbLock.Image = display.ScaleImage(pbLock.Image);
-            Height = tableLayoutPanel1.Height;
 
             if (NewPasswordMode)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -141,7 +142,9 @@ namespace mRemoteNG.Connection
             else
                 connectionLoader = new XmlConnectionsLoader(connectionFileName);
 
+            Stopwatch loaderSw = PerfLogger.Start();
             ConnectionTreeModel newConnectionTreeModel = connectionLoader.Load();
+            PerfLogger.Log($"Load: {connectionLoader.GetType().Name}.Load", loaderSw);
 
             if (useDatabase)
                 LastSqlUpdate = DateTime.Now.ToUniversalTime();

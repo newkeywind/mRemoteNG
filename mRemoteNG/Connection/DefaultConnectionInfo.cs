@@ -32,13 +32,15 @@ namespace mRemoteNG.Connection
                     string expectedPropertyName = propertyNameMutator(property.Name);
                     System.Reflection.PropertyInfo propertyFromSource = typeof(TSource).GetProperty(expectedPropertyName);
                     if (propertyFromSource == null)
-                        throw new SettingsPropertyNotFoundException($"No property with name '{expectedPropertyName}' found.");
+                        continue;
 
                     object valueFromSource = propertyFromSource.GetValue(sourceInstance, null);
 
                     if (property.PropertyType.IsEnum)
                     {
-                        property.SetValue(Instance, Enum.Parse(property.PropertyType, valueFromSource.ToString()), null);
+                        if (!System.Enum.TryParse(property.PropertyType, valueFromSource.ToString(), true, out object enumValue))
+                            continue;
+                        property.SetValue(Instance, enumValue, null);
                         continue;
                     }
 

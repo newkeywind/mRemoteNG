@@ -683,10 +683,10 @@
     <ItemGroup>
       <BuiltSatelliteResourceAssemblies Include="@(AppSatelliteResourceAssemblies->'$(OutDir)%(Culture)\mRemoteNG.resources.dll')" />
       <PublishedSatelliteResourceAssemblies Include="@(AppSatelliteResourceAssemblies->'$(PublishDir)%(Culture)\mRemoteNG.resources.dll')"
-                                          Condition="'$(PublishDir)' != '' and Exists('$(PublishDir)')" />
+                                          Condition="'$(PublishDir)' != '' and Exists('$(PublishDir)%(Culture)\mRemoteNG.resources.dll')" />
       <BuiltSatelliteCultureDirectories Include="@(AppSatelliteResourceAssemblies->'$(OutDir)%(Culture)')" />
       <PublishedSatelliteCultureDirectories Include="@(AppSatelliteResourceAssemblies->'$(PublishDir)%(Culture)')"
-                                          Condition="'$(PublishDir)' != '' and Exists('$(PublishDir)')" />
+                                          Condition="'$(PublishDir)' != '' and Exists('$(PublishDir)%(Culture)\mRemoteNG.resources.dll')" />
     </ItemGroup>
 
     <Copy SourceFiles="@(BuiltSatelliteResourceAssemblies)"
@@ -707,13 +707,16 @@
   </Target>
   <Target Name="PublishAfterBuild" AfterTargets="Build" Condition="'$(Configuration)' == 'Release Self-Contained'">
     <Message Text="Publishing self-contained application for $(Platform)..." Importance="high" />
-    <MSBuild Projects="$(MSBuildProjectFile)" Targets="Publish" Properties="Configuration=$(Configuration);Platform=$(Platform);NoBuild=true;NoRestore=true" />
+    <MSBuild Projects="$(MSBuildProjectFile)" Targets="Publish" Properties="Configuration=$(Configuration);Platform=$(Platform);NoBuild=true;NoRestore=true;IsNestedPublish=true" />
+  </Target>
+  <Target Name="CleanTemporaryBuildDirectory" AfterTargets="_PublishBuildAlternative;_PublishNoBuildAlternative"
+          Condition="'$(Configuration)' == 'Release Self-Contained' and '$(IsNestedPublish)' != 'true'">
     <PropertyGroup>
       <TempBuildDir>$([System.IO.Path]::GetFullPath('$(OutputPath)'))</TempBuildDir>
     </PropertyGroup>
     <Message Text="Cleaning up temporary build directory: $(TempBuildDir)" Importance="high" />
     <RemoveDir Directories="$(TempBuildDir)" />
-    <RemoveDir Directories="$(ProjectDir)bin\x64\Release Self-Contained" />
+    <RemoveDir Directories="$(ProjectDir)bin\$(Platform)\Release Self-Contained" />
   </Target>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v18.0\TextTemplating\Microsoft.TextTemplating.targets"
           Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v18.0\TextTemplating\Microsoft.TextTemplating.targets')" />

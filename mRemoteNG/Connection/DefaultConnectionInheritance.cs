@@ -29,10 +29,7 @@ namespace mRemoteNG.Connection
             {
                 System.Reflection.PropertyInfo propertyFromSettings = typeof(TSource).GetProperty(propertyNameMutator(property.Name));
                 if (propertyFromSettings == null)
-                {
-                    Runtime.MessageCollector.AddMessage(Messages.MessageClass.ErrorMsg, $"DefaultConInherit-LoadFrom: Could not load {property.Name}", true);
                     continue;
-                }
 
                 object valueFromSettings = propertyFromSettings.GetValue(sourceInstance, null);
                 property.SetValue(Instance, valueFromSettings, null);

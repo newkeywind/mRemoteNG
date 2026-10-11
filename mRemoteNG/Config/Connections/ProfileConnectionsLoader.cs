@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using System.Runtime.Versioning;
+using mRemoteNG.App;
 using mRemoteNG.Config.Serializers.ConnectionSerializers.Xml;
 using mRemoteNG.Config.UserProfiles;
 using mRemoteNG.Tree;
@@ -11,7 +13,9 @@ namespace mRemoteNG.Config.Connections
     {
         public ConnectionTreeModel Load()
         {
+            Stopwatch blobSw = PerfLogger.Start();
             string serializedConnections = dataProvider.Load();
+            PerfLogger.Log("Load: profile blob read+decrypt", blobSw);
             if (string.IsNullOrEmpty(serializedConnections))
             {
                 ConnectionTreeModel model = new();

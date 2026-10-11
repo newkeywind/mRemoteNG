@@ -442,8 +442,10 @@ namespace mRemoteNG.UI.Controls.ConnectionTree
             int longestIndentationAndTextWidth = int.MinValue;
             int horizontalScrollOffset = LowLevelScrollPosition.X;
             const int padding = 10;
+            const int maxRowsToMeasure = 500;
 
-            for (int i = 0; i < Items.Count; i++)
+            int rowCount = Math.Min(Items.Count, maxRowsToMeasure);
+            for (int i = 0; i < rowCount; i++)
             {
                 int rowIndentation = Items[i].Position.X;
                 int rowTextWidth = TextRenderer.MeasureText(Items[i].Text, Font).Width;
@@ -456,11 +458,13 @@ namespace mRemoteNG.UI.Controls.ConnectionTree
 
         private void PopulateTreeView(ConnectionTreeModel newModel)
         {
+            Stopwatch sw = PerfLogger.Start();
             SetObjects(GetTreeRoots(newModel));
             RegisterModelUpdateHandlers(newModel);
             NodeSearcher = new NodeSearcher(newModel);
             ExecutePostSetupActions();
             AutoResizeColumn(Columns[0]);
+            PerfLogger.Log("UI: PopulateTreeView", sw);
         }
 
         /// <summary>

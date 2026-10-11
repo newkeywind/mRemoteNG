@@ -439,6 +439,7 @@ namespace mRemoteNG.UI.Forms
             // Close the splash screen now that the main window is already visible, then
             // prompt for the profile password before the connection set is loaded.
             ProgramRoot.CloseSplash();
+            Startup.Instance.StartLoadConnectionIconsInBackground();
             new CredsAndConsSetup().LoadCredsAndCons();
 
             PromptForUpdatesPreference();

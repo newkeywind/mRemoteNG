@@ -13,6 +13,7 @@ using mRemoteNG.UI.Forms;
 using mRemoteNG.UI.TaskDialog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Security;
 using System.Threading;
@@ -72,15 +73,19 @@ namespace mRemoteNG.App
 
         public static bool TryInitializeUserProfile()
         {
-            string profilesPath = SettingsFileInfo.SettingsPath;
-            string databasePath = Path.Combine(profilesPath, SqliteUserProfileStore.DatabaseFileName);
-            Optional<SecureString> passwordResult = MiscTools.PasswordDialog("Profile password", true);
-            if (!passwordResult.Any())
-                return false;
-            SecureString password = passwordResult.First();
-
+            Stopwatch perfSw = PerfLogger.Start();
             try
             {
+                string profilesPath = SettingsFileInfo.SettingsPath;
+                string databasePath = Path.Combine(profilesPath, SqliteUserProfileStore.DatabaseFileName);
+                Stopwatch dialogSw = PerfLogger.Start();
+                Optional<SecureString> passwordResult = MiscTools.PasswordDialog("Profile password", true);
+                PerfLogger.Log("Unlock: password dialog", dialogSw);
+                if (!passwordResult.Any())
+                    return false;
+                SecureString password = passwordResult.First();
+
+                Stopwatch storeSw = PerfLogger.Start();
                 UserProfileStore = new SqliteUserProfileStore(
                     profilesPath,
                     File.Exists(databasePath) ? null : password);
@@ -89,6 +94,7 @@ namespace mRemoteNG.App
                 if (administratorSession is not null && !user.HasPassword)
                     UserProfileStore.SetInitialUserPassword(administratorSession, user.Id, password);
                 UserProfileSession session = UserProfileStore.Authenticate(user.UserName, password);
+                PerfLogger.Log("Unlock: store init + auth", storeSw);
                 if (session is null)
                     return false;
 
@@ -98,7 +104,9 @@ namespace mRemoteNG.App
                     string defaultProfilePath = Path.Combine(profilesPath, "connections.profile.db");
                     profiles = new[] { UserProfileStore.AddProfile(session, "Default", defaultProfilePath) };
                 }
+                Stopwatch selectSw = PerfLogger.Start();
                 ConnectionProfile profile = ProfileSelectionDialog.Select(profiles);
+                PerfLogger.Log("Unlock: profile selection dialog", selectSw);
                 if (profile is null)
                     return false;
                 UserProfileSession = session;
@@ -115,6 +123,10 @@ namespace mRemoteNG.App
                 UserProfileStore?.Dispose();
                 UserProfileStore = null;
                 return false;
+            }
+            finally
+            {
+                PerfLogger.Log("Unlock: TryInitializeUserProfile total", perfSw);
             }
         }
 

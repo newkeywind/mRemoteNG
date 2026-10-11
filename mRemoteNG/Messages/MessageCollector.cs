@@ -12,13 +12,22 @@ namespace mRemoteNG.Messages
     [SupportedOSPlatform("windows")]
     public class MessageCollector : INotifyCollectionChanged
     {
-        private readonly IList<IMessage> _messageList;
+        private readonly IList<IMessage> _messageList = new List<IMessage>();
+        private readonly object _messageListLock = new();
 
-        public IEnumerable<IMessage> Messages => _messageList;
+        public IEnumerable<IMessage> Messages
+        {
+            get
+            {
+                lock (_messageListLock)
+                {
+                    return new List<IMessage>(_messageList);
+                }
+            }
+        }
 
         public MessageCollector()
         {
-            _messageList = new List<IMessage>();
         }
 
         public void AddMessage(MessageClass messageClass, string messageText, bool onlyLog = false)
@@ -35,11 +44,14 @@ namespace mRemoteNG.Messages
         public void AddMessages(IEnumerable<IMessage> messages)
         {
             List<IMessage> newMessages = new();
-            foreach (IMessage message in messages)
+            lock (_messageListLock)
             {
-                if (_messageList.Contains(message)) continue;
-                _messageList.Add(message);
-                newMessages.Add(message);
+                foreach (IMessage message in messages)
+                {
+                    if (_messageList.Contains(message)) continue;
+                    _messageList.Add(message);
+                    newMessages.Add(message);
+                }
             }
 
             if (newMessages.Any())
@@ -60,7 +72,10 @@ namespace mRemoteNG.Messages
 
         public void ClearMessages()
         {
-            _messageList.Clear();
+            lock (_messageListLock)
+            {
+                _messageList.Clear();
+            }
         }
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;

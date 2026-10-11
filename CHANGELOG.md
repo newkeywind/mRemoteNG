@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [1.78.2]
 ### Fixed
 - #3367: fixed cross-thread crash when closing the splash screen on a startup error
+- #PERF: filtered native/runtime DLLs out of the plugin scan and stopped logging stale default-property errors on startup
+- fixed Password dialog OK/Cancel buttons being clipped with larger system text scaling or high DPI
+- fixed "Select connection profile" dialog hiding the OK button at larger system text scaling or high DPI
 - #2939: fixed SQL injection vulnerabilities via parameterized queries 
 - #2940: fixed for Possible command injection via Process.Start 
 - #2932: fixed HTTP/HTTPS protocol to support multiple concurrent connections
