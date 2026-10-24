@@ -332,7 +332,7 @@ namespace mRemoteNG.Connection
 
         public string GetDefaultStartupConnectionFileName()
         {
-            return Runtime.IsPortableEdition ? GetDefaultStartupConnectionFileNamePortableEdition() : GetDefaultStartupConnectionFileNameNormalEdition();
+            return GetDefaultStartupConnectionFileNamePortableEdition();
         }
 
         private void UpdateCustomConsPathSetting(string filename)
@@ -346,12 +346,6 @@ namespace mRemoteNG.Connection
                 Properties.OptionsBackupPage.Default.LoadConsFromCustomLocation = true;
                 Properties.OptionsBackupPage.Default.BackupLocation = filename;
             }
-        }
-
-        private string GetDefaultStartupConnectionFileNameNormalEdition()
-        {
-            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Application.ProductName, ConnectionsFileInfo.DefaultConnectionsFile);
-            return File.Exists(appDataPath) ? appDataPath : GetDefaultStartupConnectionFileNamePortableEdition();
         }
 
         private string GetDefaultStartupConnectionFileNamePortableEdition()

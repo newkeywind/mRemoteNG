@@ -31,5 +31,16 @@ namespace mRemoteNGTests.UI.Forms.OptionsPages
             CheckBox checkboxTester = _optionsForm.FindControl<CheckBox>("chkSaveConsOnExit");
             Assert.That(checkboxTester.Text, Does.Match("Save connections"));
         }
+
+        [Test]
+        public void ConnectionSourceComboDefaultsToFile()
+        {
+            ListViewTester listViewTester = new("lstOptionPages", _optionsForm);
+            listViewTester.Select("Startup/Exit");
+            ComboBox comboBoxTester = _optionsForm.FindControl<ComboBox>("cboConnectionSource");
+            Assert.That(comboBoxTester, Is.Not.Null);
+            Assert.That(comboBoxTester.Items.Count, Is.EqualTo(2));
+            Assert.That(comboBoxTester.SelectedIndex, Is.EqualTo(0));
+        }
     }
 }

@@ -93,8 +93,15 @@ namespace mRemoteNG.Config.Settings.Providers
             base.Initialize(Name, config);
         }
 
+        private void Reload()
+        {
+            _xmlDocument = null;
+        }
+
         public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
         {
+            Reload();
+
             foreach (SettingsPropertyValue propertyValue in collection)
                 SetValue(propertyValue);
 
@@ -116,6 +123,8 @@ namespace mRemoteNG.Config.Settings.Providers
         public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context,
                                                                           SettingsPropertyCollection collection)
         {
+            Reload();
+
             SettingsPropertyValueCollection values = new();
 
             foreach (SettingsProperty property in collection)
@@ -200,6 +209,8 @@ namespace mRemoteNG.Config.Settings.Providers
 
         public void Reset(SettingsContext context)
         {
+            Reload();
+
             _localSettingsNode.RemoveAll();
             _globalSettingsNode.RemoveAll();
 

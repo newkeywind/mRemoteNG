@@ -1916,6 +1916,33 @@ namespace mRemoteNG.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load connections from:.
+        /// </summary>
+        internal static string ConnectionSource {
+            get {
+                return ResourceManager.GetString("ConnectionSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connections file (XML).
+        /// </summary>
+        internal static string ConnectionSourceFile {
+            get {
+                return ResourceManager.GetString("ConnectionSourceFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encrypted profile database.
+        /// </summary>
+        internal static string ConnectionSourceDatabase {
+            get {
+                return ResourceManager.GetString("ConnectionSourceDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discard.
         /// </summary>
         internal static string Discard {

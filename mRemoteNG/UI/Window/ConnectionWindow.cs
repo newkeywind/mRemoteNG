@@ -113,13 +113,25 @@ namespace mRemoteNG.UI.Window
             try
             {
                 //Set the connection text based on name and preferences
+                string tabName = connectionInfo.Name;
+                string tabToolTipText = "";
+                if (!string.IsNullOrEmpty(connectionInfo.SSHTunnelConnectionName))
+                {
+                    string tunnelSuffix = " via " + connectionInfo.SSHTunnelConnectionName;
+                    if (connectionInfo.Name.EndsWith(tunnelSuffix, StringComparison.Ordinal))
+                    {
+                        tabName = connectionInfo.Name.Substring(0, connectionInfo.Name.Length - tunnelSuffix.Length);
+                        tabToolTipText = connectionInfo.Name;
+                    }
+                }
+
                 string titleText;
                 if (Properties.OptionsTabsPanelsPage.Default.ShowProtocolOnTabs)
                     titleText = connectionInfo.Protocol + @": ";
                 else
                     titleText = "";
 
-                titleText += connectionInfo.Name;
+                titleText += tabName;
 
                 if (Properties.OptionsTabsPanelsPage.Default.ShowLogonInfoOnTabs)
                 {
@@ -145,6 +157,7 @@ namespace mRemoteNG.UI.Window
                     DockAreas = DockAreas.Document | DockAreas.Float,
                     Icon = ConnectionIcon.FromString(connectionInfo.Icon),
                     TabText = titleText,
+                    ToolTipText = tabToolTipText,
                     TabPageContextMenuStrip = cmenTab
                 };
 
@@ -382,6 +395,8 @@ namespace mRemoteNG.UI.Window
             {
                 Runtime.MessageCollector.AddExceptionMessage("UI.Window.Connection.Connection_FormClosing() failed", ex);
             }
+
+            FrmMain.Default?.ShowHidePanelTabs(this);
         }
 
         public new event EventHandler ResizeBegin;

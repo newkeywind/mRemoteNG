@@ -206,6 +206,7 @@ namespace mRemoteNG.UI.Forms
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            Runtime.WindowList = [];
             MessageCollector messageCollector = Runtime.MessageCollector;
 
             SettingsLoader settingsLoader = new(this, messageCollector, _quickConnectToolStrip, _externalToolsToolStrip, _multiSshToolStrip, msMain);
@@ -229,8 +230,6 @@ namespace mRemoteNG.UI.Forms
             ProgramRoot.UiCultureChanged += OnUiCultureChanged;
 
             _fpChainedWindowHandle = NativeMethods.SetClipboardViewer(Handle);
-
-            Runtime.WindowList = [];
 
             if (Properties.App.Default.ResetPanels)
                 SetDefaultLayout();
@@ -814,9 +813,8 @@ namespace mRemoteNG.UI.Forms
         public void ShowHidePanelTabs(DockContent? closingDocument = null)
         {
             DocumentStyle newDocumentStyle;
-            bool hasConnectionWindows = pnlDock.Contents.OfType<ConnectionWindow>().Any();
 
-            if (Properties.OptionsTabsPanelsPage.Default.AlwaysShowPanelTabs || hasConnectionWindows)
+            if (Properties.OptionsTabsPanelsPage.Default.AlwaysShowPanelTabs)
             {
                 newDocumentStyle = DocumentStyle.DockingWindow; // Show the panel tabs
             }

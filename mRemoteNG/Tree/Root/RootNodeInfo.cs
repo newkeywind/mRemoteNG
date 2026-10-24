@@ -30,7 +30,7 @@ namespace mRemoteNG.Tree.Root
         public override string Name
         {
             get => _name;
-            set => _name = value;
+            set => SetField(ref _name, value, nameof(Name));
         }
         
         [LocalizedAttributes.LocalizedCategory(nameof(Language.Miscellaneous)),

@@ -152,7 +152,7 @@ namespace mRemoteNG.App
 
         private static string BuildLogFilePath()
         {
-            string logFilePath = Runtime.IsPortableEdition ? GetLogPathPortableEdition() : GetLogPathNormalEdition();
+            string logFilePath = GetLogPathPortableEdition();
 
             string? logFileName = Path.ChangeExtension(Application.ProductName, ".log");
 
@@ -161,11 +161,6 @@ namespace mRemoteNG.App
             string logFile = Path.Combine(logFilePath, logFileName);
 
             return logFile;
-        }
-
-        private static string GetLogPathNormalEdition()
-        {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Application.ProductName ?? "mRemoteNG");
         }
 
         private static string GetLogPathPortableEdition()

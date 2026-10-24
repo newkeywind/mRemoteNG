@@ -38,6 +38,7 @@ namespace mRemoteNG.UI.Forms.OptionsPages
             chkStartMinimized.Text = Language.StartMinimized;
             chkStartFullScreen.Text = Language.StartFullScreen;
             chkDisableRefocus.Text = Language.DisableRefocus;
+            lblConnectionSource.Text = Language.ConnectionSource;
             lblRegistrySettingsUsedInfo.Text = Language.OptionsCompanyPolicyMessage;
         }
 
@@ -48,6 +49,11 @@ namespace mRemoteNG.UI.Forms.OptionsPages
             chkStartMinimized.Checked = Properties.OptionsStartupExitPage.Default.StartMinimized;
             chkStartFullScreen.Checked = Properties.OptionsStartupExitPage.Default.StartFullScreen;
             chkDisableRefocus.Checked = Properties.OptionsStartupExitPage.Default.DisableRefocus;
+
+            cboConnectionSource.Items.Clear();
+            cboConnectionSource.Items.Add(Language.ConnectionSourceFile);
+            cboConnectionSource.Items.Add(Language.ConnectionSourceDatabase);
+            cboConnectionSource.SelectedIndex = Properties.OptionsStartupExitPage.Default.UseProfileDatabase ? 1 : 0;
         }
 
         public override void SaveSettings()
@@ -59,6 +65,7 @@ namespace mRemoteNG.UI.Forms.OptionsPages
             Properties.OptionsStartupExitPage.Default.StartMinimized = chkStartMinimized.Checked;
             Properties.OptionsStartupExitPage.Default.StartFullScreen = chkStartFullScreen.Checked;
             Properties.OptionsStartupExitPage.Default.DisableRefocus = chkDisableRefocus.Checked;
+            Properties.OptionsStartupExitPage.Default.UseProfileDatabase = cboConnectionSource.SelectedIndex == 1;
         }
 
         public override void LoadRegistrySettings()
