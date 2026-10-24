@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.Versioning;
-using System.Windows.Forms;
 using mRemoteNG.Connection;
 
 namespace mRemoteNG.App.Info
@@ -13,7 +12,7 @@ namespace mRemoteNG.App.Info
         private static readonly string? ExePath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(ConnectionInfo))?.Location);
 
         // ExePath resolves the running assembly's own directory and is always available at runtime.
-        public static string SettingsPath => Runtime.IsPortableEdition ? ExePath! : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + Application.ProductName;
+        public static string SettingsPath => ExePath!;
 
         public static string LayoutFileName { get; } = "pnlLayout.xml";
         public static string ExtAppsFilesName { get; } = "extApps.xml";

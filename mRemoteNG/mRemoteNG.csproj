@@ -109,6 +109,10 @@
     <RunCommand></RunCommand>
     <RunArguments></RunArguments>
   </PropertyGroup>
+  <ItemGroup Condition="'$(SelfContained)' == 'true'">
+    <KnownFrameworkReference Update="Microsoft.NETCore.App" LatestRuntimeFrameworkVersion="10.0.13" TargetingPackVersion="10.0.13" />
+    <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App" LatestRuntimeFrameworkVersion="10.0.13" TargetingPackVersion="10.0.13" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove="buildenv.tmp" />
     <None Remove="UI\Font\HandelGotDBol.ttf" />

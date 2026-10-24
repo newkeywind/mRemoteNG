@@ -63,5 +63,24 @@ namespace mRemoteNGTests.Tree
             var rootNode = new RootNodeInfo(rootNodeType);
             Assert.That(rootNode.GetTreeNodeType(), Is.EqualTo(expectedTreeNodeType));
         }
+
+        [Test]
+        public void ChangingNameRaisesPropertyChanged()
+        {
+            string changedProperty = null;
+            _rootNodeInfo.PropertyChanged += (_, e) => changedProperty = e.PropertyName;
+            _rootNodeInfo.Name = "My Connections";
+            Assert.That(changedProperty, Is.EqualTo("Name"));
+        }
+
+        [Test]
+        public void SettingSameNameDoesNotRaisePropertyChanged()
+        {
+            _rootNodeInfo.Name = "Same";
+            bool raised = false;
+            _rootNodeInfo.PropertyChanged += (_, _) => raised = true;
+            _rootNodeInfo.Name = "Same";
+            Assert.That(raised, Is.False);
+        }
     }
 }

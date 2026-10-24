@@ -118,8 +118,8 @@ namespace mRemoteNG.Config.Settings
 
         private void SetAutoSave()
         {
-            if (Properties.OptionsConnectionsPage.Default.AutoSaveEveryMinutes <= 0) return;
-            MainForm.tmrAutoSave.Interval = Properties.OptionsConnectionsPage.Default.AutoSaveEveryMinutes * 60000;
+            if (Properties.OptionsConnectionsPage.Default.AutoSaveEveryMinutesConnections <= 0) return;
+            MainForm.tmrAutoSave.Interval = Properties.OptionsConnectionsPage.Default.AutoSaveEveryMinutesConnections * 60000;
             MainForm.tmrAutoSave.Enabled = true;
         }
 

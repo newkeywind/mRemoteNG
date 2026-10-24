@@ -15,7 +15,9 @@ namespace mRemoteNG.App.Initialization
             if (Properties.App.Default.FirstStart && !Properties.OptionsBackupPage.Default.LoadConsFromCustomLocation && !File.Exists(Runtime.ConnectionsService.GetStartupConnectionFileName()))
                 Runtime.ConnectionsService.NewConnectionsFile(Runtime.ConnectionsService.GetStartupConnectionFileName());
 
-            Runtime.TryInitializeUserProfile();
+            if (Properties.OptionsStartupExitPage.Default.UseProfileDatabase)
+                Runtime.TryInitializeUserProfile();
+
             Runtime.LoadConnectionsAsync();
         }
     }

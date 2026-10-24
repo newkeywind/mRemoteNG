@@ -106,5 +106,17 @@ namespace mRemoteNG.Properties {
                 this["DisableRefocus"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseProfileDatabase {
+            get {
+                return ((bool)(this["UseProfileDatabase"]));
+            }
+            set {
+                this["UseProfileDatabase"] = value;
+            }
+        }
     }
 }

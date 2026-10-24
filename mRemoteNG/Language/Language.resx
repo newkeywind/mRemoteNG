@@ -2696,6 +2696,15 @@ Nightly Channel includes Alphas, Betas &amp; Release Candidates.</value>
   <data name="DisableRefocus" xml:space="preserve">
     <value>Disable Refocus</value>
   </data>
+  <data name="ConnectionSource" xml:space="preserve">
+    <value>Load connections from:</value>
+  </data>
+  <data name="ConnectionSourceFile" xml:space="preserve">
+    <value>Connections file (XML)</value>
+  </data>
+  <data name="ConnectionSourceDatabase" xml:space="preserve">
+    <value>Encrypted profile database</value>
+  </data>
   <data name="CredentialsUserViaAPI" xml:space="preserve">
     <value>User via API ID:</value>
   </data>

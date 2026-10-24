@@ -40,6 +40,8 @@ namespace mRemoteNG.UI.Forms.OptionsPages
             chkStartFullScreen = new MrngCheckBox();
             chkDisableRefocus = new MrngCheckBox();
             pnlOptions = new System.Windows.Forms.Panel();
+            lblConnectionSource = new System.Windows.Forms.Label();
+            cboConnectionSource = new System.Windows.Forms.ComboBox();
             lblRegistrySettingsUsedInfo = new System.Windows.Forms.Label();
             pnlOptions.SuspendLayout();
             SuspendLayout();
@@ -106,8 +108,30 @@ namespace mRemoteNG.UI.Forms.OptionsPages
             chkDisableRefocus.Text = "Disable Refocus";
             chkDisableRefocus.UseVisualStyleBackColor = true;
             // 
+            // lblConnectionSource
+            // 
+            lblConnectionSource.AutoSize = true;
+            lblConnectionSource.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            lblConnectionSource.Location = new System.Drawing.Point(6, 126);
+            lblConnectionSource.Name = "lblConnectionSource";
+            lblConnectionSource.Size = new System.Drawing.Size(120, 17);
+            lblConnectionSource.TabIndex = 7;
+            lblConnectionSource.Text = "Load connections from:";
+            // 
+            // cboConnectionSource
+            // 
+            cboConnectionSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cboConnectionSource.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            cboConnectionSource.FormattingEnabled = true;
+            cboConnectionSource.Location = new System.Drawing.Point(160, 123);
+            cboConnectionSource.Name = "cboConnectionSource";
+            cboConnectionSource.Size = new System.Drawing.Size(320, 21);
+            cboConnectionSource.TabIndex = 8;
+            // 
             // pnlOptions
             // 
+            pnlOptions.Controls.Add(cboConnectionSource);
+            pnlOptions.Controls.Add(lblConnectionSource);
             pnlOptions.Controls.Add(chkDisableRefocus);
             pnlOptions.Controls.Add(chkStartFullScreen);
             pnlOptions.Controls.Add(chkReconnectOnStart);
@@ -116,7 +140,7 @@ namespace mRemoteNG.UI.Forms.OptionsPages
             pnlOptions.Dock = System.Windows.Forms.DockStyle.Top;
             pnlOptions.Location = new System.Drawing.Point(0, 30);
             pnlOptions.Name = "pnlOptions";
-            pnlOptions.Size = new System.Drawing.Size(610, 135);
+            pnlOptions.Size = new System.Drawing.Size(610, 156);
             pnlOptions.TabIndex = 0;
             // 
             // lblRegistrySettingsUsedInfo
@@ -150,6 +174,8 @@ namespace mRemoteNG.UI.Forms.OptionsPages
         internal MrngCheckBox chkStartMinimized;
         internal MrngCheckBox chkStartFullScreen;
         internal MrngCheckBox chkDisableRefocus;
+        internal System.Windows.Forms.Label lblConnectionSource;
+        internal System.Windows.Forms.ComboBox cboConnectionSource;
         internal System.Windows.Forms.Label lblRegistrySettingsUsedInfo;
         internal System.Windows.Forms.Panel pnlOptions;
     }

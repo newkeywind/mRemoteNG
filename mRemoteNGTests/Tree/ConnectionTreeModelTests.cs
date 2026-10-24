@@ -1,6 +1,7 @@
 ﻿using mRemoteNG.Connection;
 using mRemoteNG.Container;
 using mRemoteNG.Tree;
+using mRemoteNG.Tree.Root;
 using NUnit.Framework;
 
 
@@ -35,6 +36,17 @@ namespace mRemoteNGTests.Tree
             _connectionTreeModel.AddRootNode(root);
             var connectionList = _connectionTreeModel.GetRecursiveChildList(root);
             Assert.That(connectionList, Is.EquivalentTo(new[] {folder1,folder2,con1}));
+        }
+
+        [Test]
+        public void RenamingRootNodeRaisesModelPropertyChanged()
+        {
+            var root = new RootNodeInfo(RootNodeType.Connection);
+            _connectionTreeModel.AddRootNode(root);
+            string changedProperty = null;
+            _connectionTreeModel.PropertyChanged += (_, e) => changedProperty = e.PropertyName;
+            _connectionTreeModel.RenameNode(root, "Renamed Root");
+            Assert.That(changedProperty, Is.EqualTo("Name"));
         }
     }
 }

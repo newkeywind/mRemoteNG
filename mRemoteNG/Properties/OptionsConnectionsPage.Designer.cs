@@ -26,12 +26,12 @@ namespace mRemoteNG.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int AutoSaveEveryMinutes {
+        public int AutoSaveEveryMinutesConnections {
             get {
-                return ((int)(this["AutoSaveEveryMinutes"]));
+                return ((int)(this["AutoSaveEveryMinutesConnections"]));
             }
             set {
-                this["AutoSaveEveryMinutes"] = value;
+                this["AutoSaveEveryMinutesConnections"] = value;
             }
         }
         

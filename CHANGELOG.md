@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [1.78.2]
 ### Fixed
+- fixed "Couldn't add panel" NullReferenceException at startup when no saved panel layout exists (e.g. after moving the data files next to the executable)
+- fixed redundant panel tab: with "Always show panel tabs" unchecked a single connection panel no longer shows its title tab (e.g. "General"), the panel tabs reappear once two or more panels are open
 - #3367: fixed cross-thread crash when closing the splash screen on a startup error
 - #PERF: filtered native/runtime DLLs out of the plugin scan and stopped logging stale default-property errors on startup
 - fixed Password dialog OK/Cancel buttons being clipped with larger system text scaling or high DPI
@@ -22,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - #2668: fixed ssh quickconnect exception
 - #2611: fixed correct registry path
 - #2496: fixed use pwfile instead of cleartext password for putty connections 
+- fixed renaming the connections tree root node not being persisted: the root node name change did not raise a change notification, so it was never autosaved (affected both the connections file and the encrypted profile database)
 
 ### Added
 - #876: added Wake-on-LAN option to the connection tree context menu to wake sleeping or powered-off machines using the connection's MAC Address
@@ -38,14 +41,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - #2642: added dark native title bar and matching dark mode for scrollbars, floating windows and dialogs
 - #2591: add Clickstudios Passwordstate API connector
 - #2212: added 1Password integration
+- added a "Load connections from" selector to the Startup/Exit options page to choose between the connections file (XML) and the encrypted profile database; the chosen mode is used on every startup instead of prompting each launch
 
 ### Updated
+- store all data and settings files (databases, connection file, logs, options) next to the executable in both the normal and portable editions
+- store the options page settings in the portable settings file next to the executable as well, instead of a per-user user.config
+- connection tabs that use an SSH tunnel now show only the connection name, with the "via <tunnel>" part displayed in the tab tooltip
 - #2883: Improve 1Password logging 
 - #2854: Refactor settings dialog to be opened in dockable panel (for consistency)
 - #2597: Remember the opened connection file on relaunch
 - #2502: Updated Polish translation
 
 ### Dependency update
+- bumped System.Security.Cryptography.Pkcs to 10.0.13 (fixes GHSA-846f-f764-76mx and GHSA-2fmv-rv2c-59x7) and pinned the self-contained runtime pack to 10.0.13
 - #3bd2fe8: puttyng updated to x64 version (and signed)
 
 ## [1.77.3.1784]
